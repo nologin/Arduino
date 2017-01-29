@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 
-const float vcc = 4.75; // Should be 5.0
+const float vcc = 4.56; // Should be 5.0
 // const float vcc = 5.0; // Should be 5.0
 
 float getUvIndex(uint8_t vref_pin, uint8_t data_pin, int8_t temperature) {
@@ -29,10 +29,10 @@ float getUvIndex(uint8_t vref_pin, uint8_t data_pin, int8_t temperature) {
     float idx_max = 2.8;
 
     if (temperature > 50) { // The 75 degree curve
-        idx_min = 0.95;
+        idx_min = 0.93;
         idx_max = 2.76;
     } else if (temperature < -15) {
-        idx_min = 1.05;
+        idx_min = 1.06;
         idx_max = 2.95;
     } else if (temperature < 5) {
         idx_min = 1.03;
@@ -45,7 +45,7 @@ float getUvIndex(uint8_t vref_pin, uint8_t data_pin, int8_t temperature) {
     Serial.print(result);
     Serial.println();
     if (result < 0.0) {
-        result = 0.0;
+        // result = 0.0;
         Serial.print(F("UV Error!"));
         Serial.println();
     }
