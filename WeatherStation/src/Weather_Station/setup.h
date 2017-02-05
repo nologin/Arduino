@@ -8,7 +8,7 @@
 // The display
 const uint8_t DISPLAY_CLK  = 13;
 const uint8_t DISPLAY_DATA = 11;
-const uint8_t DISPLAY_CS   = 10;
+const uint8_t DISPLAY_CS   = 7;
 const uint8_t DISPLAY_DC   =  9;
 const uint8_t DISPLAY_RST  =  8;
 const uint8_t DISPLAY_D0   = 13;
@@ -30,7 +30,10 @@ U8X8_SSD1306_128X64_NONAME_4W_SW_SPI name(DISPLAY_CLK, DISPLAY_DATA, DISPLAY_CS,
 
 
 // DS18b20
-const uint8_t TEMP_PIN     =  2;
+const uint8_t TEMP_PIN_OUT     =  2;
+
+// DS18S20
+const uint8_t TEMP_PIN_IN     =  3;
 
 // UV
 const uint8_t UVOUT = A0;

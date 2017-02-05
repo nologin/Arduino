@@ -8,16 +8,18 @@
 #include <OneWire.h>
 #include <U8x8lib.h>
 #include <U8g2lib.h>
+#include <RH_ASK.h>
 
 // The display
 Display(LCD);
 
 // DS18b20
-OneWire ds(TEMP_PIN);  // on pin 2 (a 4.7K resistor is necessary)
-
+OneWire ds_out(TEMP_PIN_OUT);  // on pin 2 (a 4.7K resistor is necessary)
+OneWire ds_in(TEMP_PIN_IN);
 
 
 void setup() {
+    
     Serial.begin(115200);
     Serial.print(F("Initializing pins...\n"));
 
@@ -45,85 +47,24 @@ void setup() {
 
 
 void loop() {
-    float temperature = get_temperature(ds);
-    float uv_index = getUvIndex(REF_3V3, UVOUT, temperature);
-    /*
-                LCD.setCursor(0, 0);
-                LCD.print(F("Hello World!"));
-
-                LCD.setCursor(0, 1);
-                LCD.print(F("UV: "));
-                float temperature = get_temperature(ds);
-                LCD.print(getUvIndex(REF_3V3, UVOUT, temperature));
-                LCD.print(F("   "));
-
-                LCD.setCursor(0, 2);
-                LCD.print(F("T: "));
-                LCD.print(temperature);
-                LCD.print(F("   "));
-    */
+    float temperature_out = get_temperature(ds_out);
+    float temperature_in = get_temperature(ds_in);
+    float uv_index = getUvIndex(REF_3V3, UVOUT, temperature_out);
     LCD.firstPage();
     do {
         LCD.setFont(u8g2_font_unifont_t_cyrillic);
         LCD.setCursor(15, 20);
-        LCD.print(F("Темп:  "));
-        LCD.print(temperature);
+        LCD.print(F("Темп <-: "));
+        LCD.print(temperature_in);
         LCD.setCursor(15, 35);
+        LCD.print(F("Темп ->: "));  
+        LCD.print(temperature_out);        
+        LCD.setCursor(15, 50);        
         LCD.print(F("УВ Инд: "));
         LCD.print(uv_index);
-        if (temperature > 29.0) {
-            LCD.setFont(u8g2_font_unifont_t_cyrillic);
-            LCD.setCursor(15, 50);
-            LCD.print(F("Жега!"));
-        } else if (temperature < 0.00) {
-            LCD.setFont(u8g2_font_unifont_t_cyrillic);
-            LCD.setCursor(15, 50);
-            LCD.print(F("Студ!"));
-        } else if (temperature < 5.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(15, 50, 0x2603);
-            LCD.drawGlyph(35, 50, 0x2603);
-            LCD.drawGlyph(55, 50, 0x2603);
-        } else if (temperature < 10.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(15, 50, 0x2603);
-            LCD.drawGlyph(35, 50, 0x2603);
-        } else if (temperature < 15.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(15, 50, 0x2603);
-        } else if (temperature < 20.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(15, 50, 0x2600);
-        }  else if (temperature < 25.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(15, 50, 0x2600);
-            LCD.drawGlyph(25, 50, 0x2600);
-        } else if (temperature < 29.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(15, 50, 0x2600);
-            LCD.drawGlyph(25, 50, 0x2600);
-            LCD.drawGlyph(35, 50, 0x2600);
-        }
 
-        if (uv_index > 5.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(80, 50, 0x2600);
-            LCD.drawGlyph(90, 50, 0x2600);
-            LCD.drawGlyph(100, 50, 0x2600);
-        } else if (uv_index < 1.00) {
-            LCD.setFont(u8g2_font_unifont_t_cyrillic);
-            LCD.setCursor(80, 50);
-            LCD.print(F("UV OK"));
-        } else if (uv_index < 2.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(80, 50, 0x2600);
-        } else if (uv_index < 5.00) {
-            LCD.setFont(u8g2_font_unifont_t_symbols);
-            LCD.drawGlyph(80, 50, 0x2600);
-            LCD.drawGlyph(90, 50, 0x2600);
-        }
         LCD.drawRFrame(0,0,128,64,7);
     } while ( LCD.nextPage() );
-    //delay(100);
+    delay(100);
 }
 
