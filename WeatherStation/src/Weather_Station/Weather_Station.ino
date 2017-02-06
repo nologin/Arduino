@@ -19,7 +19,7 @@ OneWire ds_in(TEMP_PIN_IN);
 
 
 void setup() {
-    
+
     Serial.begin(115200);
     Serial.print(F("Initializing pins...\n"));
 
@@ -57,9 +57,9 @@ void loop() {
         LCD.print(F("Темп <-: "));
         LCD.print(temperature_in);
         LCD.setCursor(15, 35);
-        LCD.print(F("Темп ->: "));  
-        LCD.print(temperature_out);        
-        LCD.setCursor(15, 50);        
+        LCD.print(F("Темп ->: "));
+        LCD.print(temperature_out);
+        LCD.setCursor(15, 50);
         LCD.print(F("УВ Инд: "));
         LCD.print(uv_index);
 
